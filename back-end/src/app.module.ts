@@ -13,20 +13,31 @@ import { JobsModule } from './jobs/jobs.module';
 
 @Module({
   imports: [
+    // Configuration
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
+
+    // Database
     TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
         getDatabaseConfig(configService),
     }),
+
+    // Scheduler for cleanup jobs
     ScheduleModule.forRoot(),
+
+    // Feature modules
     AuthModule,
     UsersModule,
     ContainersModule,
     AdminModule,
     JobsModule,
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

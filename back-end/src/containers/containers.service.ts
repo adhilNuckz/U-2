@@ -40,6 +40,9 @@ export class ContainersService {
     // Calculate expiration time (30 minutes)
     const expiresAt = new Date();
     const lifetime = this.configService.get<number>('CONTAINER_MAX_LIFETIME');
+    if (lifetime === undefined) {
+  throw new Error('CONTAINER_MAX_LIFETIME is not defined');
+}
     expiresAt.setSeconds(expiresAt.getSeconds() + lifetime);
 
     // Save to database

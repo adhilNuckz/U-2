@@ -62,27 +62,27 @@ const AdminPanel: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="adminpanel-bg adminpanel-center">
+        <div className="adminpanel-loading">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <nav className="bg-gray-800 p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-white">Admin Panel</h1>
-          <div className="flex items-center gap-4">
+    <div className="adminpanel-bg">
+      <nav className="adminpanel-navbar">
+        <div className="adminpanel-navbar-container">
+          <h1 className="adminpanel-title">Admin Panel</h1>
+          <div className="adminpanel-actions">
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+              className="adminpanel-dashboard-btn"
             >
               Dashboard
             </button>
             <button
               onClick={logout}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+              className="adminpanel-logout-btn"
             >
               Logout
             </button>
@@ -90,60 +90,51 @@ const AdminPanel: React.FC = () => {
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="adminpanel-content">
         {/* System Health */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-xl">
-            <h3 className="text-gray-400 text-sm mb-2">Total Users</h3>
-            <p className="text-3xl font-bold text-white">{health?.totalUsers || 0}</p>
+        <div className="adminpanel-health-grid">
+          <div className="adminpanel-health-card">
+            <h3 className="adminpanel-health-label">Total Users</h3>
+            <p className="adminpanel-health-value">{health?.totalUsers || 0}</p>
           </div>
-          
-          <div className="bg-gray-800 p-6 rounded-lg shadow-xl">
-            <h3 className="text-gray-400 text-sm mb-2">Active Containers</h3>
-            <p className="text-3xl font-bold text-green-500">{health?.activeContainers || 0}</p>
+          <div className="adminpanel-health-card">
+            <h3 className="adminpanel-health-label">Active Containers</h3>
+            <p className="adminpanel-health-value adminpanel-health-green">{health?.activeContainers || 0}</p>
           </div>
-          
-          <div className="bg-gray-800 p-6 rounded-lg shadow-xl">
-            <h3 className="text-gray-400 text-sm mb-2">Max Capacity</h3>
-            <p className="text-3xl font-bold text-blue-500">10</p>
+          <div className="adminpanel-health-card">
+            <h3 className="adminpanel-health-label">Max Capacity</h3>
+            <p className="adminpanel-health-value adminpanel-health-blue">10</p>
           </div>
         </div>
 
         {/* Active Containers */}
-        <div className="bg-gray-800 p-6 rounded-lg shadow-xl mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Active Containers</h2>
-          
+        <div className="adminpanel-table-card">
+          <h2 className="adminpanel-table-title">Active Containers</h2>
           {health?.containers?.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
+            <div className="adminpanel-table-scroll">
+              <table className="adminpanel-table">
                 <thead>
-                  <tr className="border-b border-gray-700">
-                    <th className="py-3 px-4 text-gray-400">Container</th>
-                    <th className="py-3 px-4 text-gray-400">User</th>
-                    <th className="py-3 px-4 text-gray-400">CPU %</th>
-                    <th className="py-3 px-4 text-gray-400">Memory</th>
-                    <th className="py-3 px-4 text-gray-400">Expires</th>
-                    <th className="py-3 px-4 text-gray-400">Actions</th>
+                  <tr className="adminpanel-table-header-row">
+                    <th className="adminpanel-table-header">Container</th>
+                    <th className="adminpanel-table-header">User</th>
+                    <th className="adminpanel-table-header">CPU %</th>
+                    <th className="adminpanel-table-header">Memory</th>
+                    <th className="adminpanel-table-header">Expires</th>
+                    <th className="adminpanel-table-header">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {health.containers.map((container: any) => (
-                    <tr key={container.id} className="border-b border-gray-700 hover:bg-gray-750">
-                      <td className="py-3 px-4 text-white font-mono text-sm">
-                        {container.containerName}
-                      </td>
-                      <td className="py-3 px-4 text-gray-300">{container.userEmail}</td>
-                      <td className="py-3 px-4 text-gray-300">{container.cpuPercent}%</td>
-                      <td className="py-3 px-4 text-gray-300">
-                        {container.memoryUsageMB}/{container.memoryLimitMB} MB
-                      </td>
-                      <td className="py-3 px-4 text-gray-300">
-                        {new Date(container.expiresAt).toLocaleTimeString()}
-                      </td>
-                      <td className="py-3 px-4">
+                    <tr key={container.id} className="adminpanel-table-row">
+                      <td className="adminpanel-table-cell adminpanel-table-id">{container.containerName}</td>
+                      <td className="adminpanel-table-cell">{container.userEmail}</td>
+                      <td className="adminpanel-table-cell">{container.cpuPercent}%</td>
+                      <td className="adminpanel-table-cell">{container.memoryUsageMB}/{container.memoryLimitMB} MB</td>
+                      <td className="adminpanel-table-cell">{new Date(container.expiresAt).toLocaleTimeString()}</td>
+                      <td className="adminpanel-table-cell">
                         <button
                           onClick={() => handleDeleteContainer(container.containerName)}
-                          className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded"
+                          className="adminpanel-delete-btn"
                         >
                           Delete
                         </button>
@@ -154,47 +145,42 @@ const AdminPanel: React.FC = () => {
               </table>
             </div>
           ) : (
-            <p className="text-gray-400">No active containers</p>
+            <p className="adminpanel-table-empty">No active containers</p>
           )}
         </div>
 
         {/* Users List */}
-        <div className="bg-gray-800 p-6 rounded-lg shadow-xl">
-          <h2 className="text-2xl font-bold text-white mb-4">Users</h2>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
+        <div className="adminpanel-table-card">
+          <h2 className="adminpanel-table-title">Users</h2>
+          <div className="adminpanel-table-scroll">
+            <table className="adminpanel-table">
               <thead>
-                <tr className="border-b border-gray-700">
-                  <th className="py-3 px-4 text-gray-400">ID</th>
-                  <th className="py-3 px-4 text-gray-400">Email</th>
-                  <th className="py-3 px-4 text-gray-400">Role</th>
-                  <th className="py-3 px-4 text-gray-400">Active</th>
-                  <th className="py-3 px-4 text-gray-400">Total</th>
-                  <th className="py-3 px-4 text-gray-400">Joined</th>
-                  <th className="py-3 px-4 text-gray-400">Actions</th>
+                <tr className="adminpanel-table-header-row">
+                  <th className="adminpanel-table-header">ID</th>
+                  <th className="adminpanel-table-header">Email</th>
+                  <th className="adminpanel-table-header">Role</th>
+                  <th className="adminpanel-table-header">Active</th>
+                  <th className="adminpanel-table-header">Total</th>
+                  <th className="adminpanel-table-header">Joined</th>
+                  <th className="adminpanel-table-header">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {users.map((u: any) => (
-                  <tr key={u.id} className="border-b border-gray-700 hover:bg-gray-750">
-                    <td className="py-3 px-4 text-white">{u.id}</td>
-                    <td className="py-3 px-4 text-gray-300">{u.email}</td>
-                    <td className="py-3 px-4">
-                      <span className={`px-2 py-1 text-xs rounded ${u.isAdmin ? 'bg-purple-600' : 'bg-gray-600'} text-white`}>
-                        {u.isAdmin ? 'Admin' : 'User'}
-                      </span>
+                  <tr key={u.id} className="adminpanel-table-row">
+                    <td className="adminpanel-table-cell adminpanel-table-id">{u.id}</td>
+                    <td className="adminpanel-table-cell">{u.email}</td>
+                    <td className="adminpanel-table-cell">
+                      <span className={`adminpanel-role-badge ${u.isAdmin ? 'adminpanel-role-admin' : 'adminpanel-role-user'}`}>{u.isAdmin ? 'Admin' : 'User'}</span>
                     </td>
-                    <td className="py-3 px-4 text-gray-300">{u.activeContainers}</td>
-                    <td className="py-3 px-4 text-gray-300">{u.totalContainers}</td>
-                    <td className="py-3 px-4 text-gray-300">
-                      {new Date(u.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="py-3 px-4">
+                    <td className="adminpanel-table-cell">{u.activeContainers}</td>
+                    <td className="adminpanel-table-cell">{u.totalContainers}</td>
+                    <td className="adminpanel-table-cell">{new Date(u.createdAt).toLocaleDateString()}</td>
+                    <td className="adminpanel-table-cell">
                       {!u.isAdmin && u.id !== user?.id && (
                         <button
                           onClick={() => handleDeleteUser(u.id)}
-                          className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded"
+                          className="adminpanel-delete-btn"
                         >
                           Delete
                         </button>

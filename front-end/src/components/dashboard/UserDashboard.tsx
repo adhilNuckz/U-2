@@ -12,19 +12,19 @@ const UserDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
+      <div className="userdashboard-loading">
         <LoadingSpinner text="Loading..." />
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="userdashboard-root">
       {container ? (
         <Card title="Active Container">
           <ContainerStatus container={container} />
           
-          <div className="flex gap-4 mt-6">
+          <div className="userdashboard-actions">
             <Button
               variant="primary"
               fullWidth
@@ -54,7 +54,7 @@ const UserDashboard: React.FC = () => {
             <Button
               variant="primary"
               onClick={createContainer}
-              className="px-8"
+              className="userdashboard-create-btn"
             >
               Create Container
             </Button>

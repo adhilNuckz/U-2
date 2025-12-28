@@ -8,9 +8,9 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="layout-bg">
       <Navbar title={title} />
-      <main className="container mx-auto px-4 py-8">
+      <main className="layout-main">
         {children}
       </main>
     </div>

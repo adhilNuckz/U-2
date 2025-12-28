@@ -1,6 +1,8 @@
 import { ConfigService } from '@nestjs/config';
 
-export const getCorsConfig = (configService: ConfigService): CorsOptions => {
+
+export const getCorsConfig = (configService: ConfigService) => {
+
   const nodeEnv = configService.get<string>('NODE_ENV', 'development');
   
   if (nodeEnv === 'production') {

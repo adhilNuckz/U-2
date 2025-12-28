@@ -85,25 +85,24 @@ const Terminal: React.FC<TerminalProps> = ({ containerId }) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="terminal-root">
       <div
         ref={terminalRef}
-        className="flex-1 p-4 bg-gray-900 rounded-lg"
+        className="terminal-xterm"
         style={{ height: '500px' }}
       />
-      
-      <div className="mt-4 flex gap-2">
+      <div className="terminal-input-row">
         <input
           type="text"
           value={command}
           onChange={(e) => setCommand(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Type command here and press Enter"
-          className="flex-1 px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="terminal-input"
         />
         <button
           onClick={() => executeCommand(command)}
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200"
+          className="terminal-execute-btn"
         >
           Execute
         </button>

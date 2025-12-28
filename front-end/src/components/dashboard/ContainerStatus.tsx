@@ -29,34 +29,30 @@ const ContainerStatus: React.FC<ContainerStatusProps> = ({ container }) => {
   }, [container]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center text-gray-300">
-        <span className="font-medium">Container ID:</span>
-        <span className="font-mono text-sm bg-gray-700 px-3 py-1 rounded">
+    <div className="containerstatus-root">
+      <div className="containerstatus-row">
+        <span className="containerstatus-label">Container ID:</span>
+        <span className="containerstatus-id">
           {container.containerId?.substring(0, 12)}
         </span>
       </div>
-      
-      <div className="flex justify-between items-center text-gray-300">
-        <span className="font-medium">Time Remaining:</span>
+      <div className="containerstatus-row">
+        <span className="containerstatus-label">Time Remaining:</span>
         <span
-          className={`font-bold text-lg ${
+          className={`containerstatus-time ${
             timeRemaining === 'Expired'
-              ? 'text-red-500'
+              ? 'containerstatus-expired'
               : parseInt(timeRemaining.split(':')[0]) < 5
-              ? 'text-yellow-500'
-              : 'text-green-500'
+              ? 'containerstatus-warning'
+              : 'containerstatus-active'
           }`}
         >
           {timeRemaining}
         </span>
       </div>
-
-      <div className="flex justify-between items-center text-gray-300">
-        <span className="font-medium">Status:</span>
-        <span className="px-3 py-1 bg-green-600 text-white text-sm rounded-full">
-          Running
-        </span>
+      <div className="containerstatus-row">
+        <span className="containerstatus-label">Status:</span>
+        <span className="containerstatus-status">Running</span>
       </div>
     </div>
   );

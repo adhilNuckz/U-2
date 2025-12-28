@@ -11,37 +11,33 @@ const Navbar: React.FC<NavbarProps> = ({ title = 'Ubuntu SaaS' }) => {
   const { user, logout } = useAuth();
 
   return (
-    <nav className="bg-gray-800 p-4 shadow-lg">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="navbar-root">
+      <div className="navbar-container">
         <h1 
-          className="text-2xl font-bold text-white cursor-pointer"
+          className="navbar-title"
           onClick={() => navigate('/dashboard')}
         >
           {title}
         </h1>
-        
-        <div className="flex items-center gap-4">
-          <span className="text-gray-300 hidden md:block">{user?.email}</span>
-          
+        <div className="navbar-actions">
+          <span className="navbar-user-email">{user?.email}</span>
           {user?.isAdmin && (
             <button
               onClick={() => navigate('/admin')}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition duration-200"
+              className="navbar-admin-btn"
             >
               Admin Panel
             </button>
           )}
-          
           <button
             onClick={() => navigate('/dashboard')}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition duration-200"
+            className="navbar-dashboard-btn"
           >
             Dashboard
           </button>
-          
           <button
             onClick={logout}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200"
+            className="navbar-logout-btn"
           >
             Logout
           </button>

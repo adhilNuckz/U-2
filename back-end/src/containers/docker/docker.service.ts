@@ -1,20 +1,23 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as Docker from 'dockerode';
+import Docker = require('dockerode');
 
 @Injectable()
 export class DockerService {
   private docker: Docker;
 
-  constructor(private configService: ConfigService) {
-    const dockerHost = this.configService.get('DOCKER_HOST');
-    
-    // Connect to remote Docker host (Server 2)
-    this.docker = new Docker({
-      host: dockerHost.replace('http://', ''),
-      port: 2375,
-    });
-  }
+constructor(private configService: ConfigService) {
+  const dockerHost = this.configService.get('DOCKER_HOST');
+  
+  // Parse the Docker host URL
+  const url = new URL(dockerHost);
+  
+  // Connect to remote Docker host (Server 2)
+  this.docker = new Docker({
+    host: url.hostname,
+    port: parseInt(url.port) || 2375,
+  });
+}
 
   async createContainer(userId: number): Promise<any> {
     try {

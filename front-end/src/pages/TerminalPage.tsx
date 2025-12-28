@@ -63,32 +63,32 @@ const TerminalPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="terminal-bg terminal-center">
+        <div className="terminal-loading">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col">
-      <nav className="bg-gray-800 p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-white">Ubuntu Terminal</h1>
-          <div className="flex items-center gap-4">
-            <div className="text-gray-300">
-              Time: <span className={`font-bold ${parseInt(timeRemaining.split(':')[0]) < 5 ? 'text-red-500' : 'text-green-500'}`}>
+    <div className="terminal-bg terminal-flex-col">
+      <nav className="terminal-navbar">
+        <div className="terminal-navbar-container">
+          <h1 className="terminal-title">Ubuntu Terminal</h1>
+          <div className="terminal-actions">
+            <div className="terminal-time">
+              Time: <span className={`terminal-time-value ${parseInt(timeRemaining.split(':')[0]) < 5 ? 'terminal-time-expired' : 'terminal-time-active'}`}>
                 {timeRemaining}
               </span>
             </div>
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+              className="terminal-dashboard-btn"
             >
               Dashboard
             </button>
             <button
               onClick={logout}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+              className="terminal-logout-btn"
             >
               Logout
             </button>
@@ -96,20 +96,19 @@ const TerminalPage: React.FC = () => {
         </div>
       </nav>
 
-      <div className="flex-1 container mx-auto px-4 py-8">
-        <div className="bg-gray-800 p-6 rounded-lg shadow-xl h-full">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-white">
+      <div className="terminal-content">
+        <div className="terminal-card">
+          <div className="terminal-card-header">
+            <h2 className="terminal-card-title">
               Container: {container?.containerId?.substring(0, 12)}
             </h2>
             <button
               onClick={downloadOutput}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+              className="terminal-download-btn"
             >
               Download Output
             </button>
           </div>
-          
           <Terminal containerId={container?.containerId} />
         </div>
       </div>

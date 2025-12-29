@@ -72,18 +72,52 @@ constructor(private configService: ConfigService) {
 
       const stream = await exec.start({ hijack: true, stdin: false });
 
+      // The stream returned by Docker exec in non-TTY mode uses a multiplexed
+      // binary format: an 8-byte header (1 byte stream type, 3 bytes zero, 4
+      // bytes payload length big-endian) followed by the payload. If we don't
+      // demultiplex, the terminal receives those header bytes which appear as
+      // control characters and cause the diagonal/collapsed layout you saw.
       return new Promise((resolve, reject) => {
+        let buffers: Buffer[] = [];
         let output = '';
 
-        stream.on('data', (chunk) => {
-          output += chunk.toString();
+        stream.on('data', (chunk: any) => {
+          const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+          buffers.push(buf);
+
+          let combined = Buffer.concat(buffers);
+
+          // Parse and strip multiplexed headers if present
+          while (combined.length > 0) {
+            // If there is at least an 8-byte header and the first byte looks
+            // like a Docker multiplex stream frame (0=stdin,1=stdout,2=stderr)
+            if (combined.length >= 8 && (combined[0] === 0 || combined[0] === 1 || combined[0] === 2)) {
+              const payloadLen = combined.readUInt32BE(4);
+              if (combined.length >= 8 + payloadLen) {
+                const payload = combined.slice(8, 8 + payloadLen);
+                output += payload.toString('utf8');
+                combined = combined.slice(8 + payloadLen);
+              } else {
+                // Wait for more data
+                break;
+              }
+            } else {
+              // Not a multiplexed frame: append everything and clear buffer
+              output += combined.toString('utf8');
+              combined = Buffer.alloc(0);
+            }
+          }
+
+          buffers = combined.length ? [combined] : [];
         });
 
         stream.on('end', () => {
           resolve(output);
         });
 
-        stream.on('error', reject);
+        stream.on('error', (err) => {
+          reject(err);
+        });
       });
     } catch (error) {
       throw new InternalServerErrorException('Command execution failed');

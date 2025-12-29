@@ -38,8 +38,8 @@ export class ContainersService {
       await this.dockerService.createContainer(userId);
 
     // Calculate expiration time (30 minutes)
-    const expiresAt = new Date();
-    const lifetime = this.configService.get<number>('CONTAINER_MAX_LIFETIME');
+    const lifetime = 900 ;
+    const expiresAt = new Date(Date.now() + (lifetime * 1000)); // Convert seconds to milliseconds
     if (lifetime === undefined) {
   throw new Error('CONTAINER_MAX_LIFETIME is not defined');
 }
